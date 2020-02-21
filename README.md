@@ -15,6 +15,14 @@ See [this article](https://medium.com/@caphun/react-native-load-local-static-sit
 
 # Usage
 
+First install it:
+
+```sh
+npm install --save lepont
+# or
+yarn add lepont
+```
+
 On react-native side
 
 ```tsx
