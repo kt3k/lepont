@@ -1,6 +1,6 @@
 {
   "name": "lepont",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A native <-> browser (webview) bridge library for react-native",
   "main": "index.js",
   "files": [
