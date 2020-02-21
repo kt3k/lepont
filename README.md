@@ -1,9 +1,13 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/kt3k/lepont/master/design/lepont.png" width="150" />
+</p>
+<p align="center">
   A native <-> browser (webview) bridge library for react-native
 </p>
 
-Current Version: v0.2.0 (WIP)
+<p align="center">
+  Current Version: v0.2.0 (WIP)
+</p>
 
 # Usage
 
