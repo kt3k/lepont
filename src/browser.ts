@@ -36,14 +36,13 @@ class Bridge extends EventEmitter {
    */
   async sendMessage<T>(message: Message): Promise<T> {
     const id = uniqId()
-    return new Promise<T>((r, _) => {
-      this.resolverTable[id] = r
-    })
-
     window.postMessage({
       id,
       message,
     }, "*")
+    return new Promise<T>((r, _) => {
+      this.resolverTable[id] = r
+    })
   }
 }
 
@@ -61,4 +60,4 @@ export function off(type: string, cb: (arg0: any) => void) {
   return bridge.off(type, cb)
 }
 
-Object.assign(window, { LePont: new Bridge() })
+Object.assign(window, { LePont: bridge })
