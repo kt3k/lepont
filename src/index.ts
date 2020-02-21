@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Message, MessageFromWebView } from './types'
+import { Message, MessageWithId } from './types'
 
-type Registry = {
-  ref: unknown
-  onMessage: (m: MessageFromWebView) => void
+type WebView = {
+  injectJavaScript: (s: string) => void
 }
 
 type Bridge = {
@@ -12,7 +11,7 @@ type Bridge = {
 
 type BridgeHandler<T> = (payload: T, bridge: Bridge) => unknown
 
-export function useRegistry(): RegistryImpl {
+export function useRegistry(): Registry | null {
   const [registry, setRegistry] = useState<Registry | null>(null)
   useEffect(() => {
     setRegistry(new Registry())
@@ -20,20 +19,20 @@ export function useRegistry(): RegistryImpl {
   return registry
 }
 
-export const useBridge<T>(registry: Registry, type: string, handler: BridgeHandler<T>) {
+export function useBridge<T>(
+  registry: Registry,
+  type: string,
+  handler: BridgeHandler<T>
+) {
   if (registry) {
     registry.register(type, handler)
   }
 }
 
-class RegistryImpl implements Bridge & Registry {
-  webView: WebView
+class Registry implements Bridge {
+  webView: WebView | null = null
 
-  registry: { [key: string]: BridgeHandler<any> }
-
-  constructor() {
-    this.registry = {}
-  }
+  registry: { [key: string]: BridgeHandler<any> } = {}
 
   register(type: string, handler: BridgeHandler<any>) {
     this.registry[type] = handler
@@ -43,9 +42,9 @@ class RegistryImpl implements Bridge & Registry {
     this.webView = webView
   }
 
-  async onMessage(fromWebView: MessageFromWebView): Promise<unknown> {
+  async onMessage(fromWebView: MessageWithId): Promise<unknown> {
     const { id, message } = fromWebView
-    const type = message.type
+    const { type, payload } = message
     if (!type) {
       console.error(`message type cannot be empty: ${type} is given`)
       return
@@ -57,13 +56,21 @@ class RegistryImpl implements Bridge & Registry {
       return
     }
 
-    const res = await registrant.handler(msg.payload)
+    const res = await registrant(payload, this)
     const resPayload = JSON.stringify({ id, res })
-    this.ref.injectJavaScript(`LePont.onResult(${resPayload})`)
+    this.injectScript(`LePont.onResult(${resPayload})`)
   }
 
-  sendMessage(m: Message) {
-    const msgPayload = JSON.strigify(m)
-    this.ref.injectJavaScript(`LePont.onMessage(${msgPayload})`)
+  sendMessage(m: Message): void {
+    const msgPayload = JSON.stringify(m)
+    this.injectScript(`LePont.onMessage(${msgPayload})`)
+  }
+
+  injectScript(src: string): void {
+    if (!this.webView) {
+      console.error('webView for lepont registry is not ready!')
+      return
+    }
+    this.webView.injectJavaScript(src)
   }
 }

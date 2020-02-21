@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strict": true
+  },
+  "files": ["src/index.ts", "src/browser.ts"]
+}

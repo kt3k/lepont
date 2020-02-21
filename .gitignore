@@ -1,0 +1,11 @@
+# npm
+node_modules
+
+# yarn
+yarn-error.log
+
+# dist files
+dist
+
+# parcel cache
+.cache
