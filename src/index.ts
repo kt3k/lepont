@@ -48,7 +48,7 @@ class Registry implements Bridge {
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: `message type cannot be empty: ${type} is given` }
+        error: { message: `Message type cannot be empty: ${type} is given` }
       })
       return
     }
@@ -59,7 +59,7 @@ class Registry implements Bridge {
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: `Error: No entry for message type: ${type}` }
+        error: { message: `No entry for message type: ${type}` }
       })
       return
     }
