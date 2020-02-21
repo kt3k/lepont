@@ -9,6 +9,10 @@
   Current Version: v0.4.2 (WIP)
 </p>
 
+You can bridge the webview and react-native by using this libary. You can consider this module as PhoneGap (Cordova) on top of react-native.
+
+See [this article](https://medium.com/@caphun/react-native-load-local-static-site-inside-webview-2b93eb1c4225) for how to bundle the static web assets in your react-native apps.
+
 # Usage
 
 On react-native side
