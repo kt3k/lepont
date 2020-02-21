@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Message, MessageWithId } from './types'
 
 type WebView = {
@@ -21,9 +21,9 @@ export function useBridge<T>(
   type: string,
   handler: BridgeHandler<T>
 ) {
-  if (registry) {
+  useEffect(() => {
     registry.register(type, handler)
-  }
+  }, [registry])
 }
 
 class Registry implements Bridge {
