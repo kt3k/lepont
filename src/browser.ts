@@ -43,7 +43,7 @@ class Bridge extends EventEmitter {
    */
   async sendMessage<T>(message: Message): Promise<T> {
     const id = uniqId()
-    window.postMessage(JSON.stringify({
+    ;(window as any).ReactNativeWebView.postMessage(JSON.stringify({
       id,
       message,
     }), "*")
