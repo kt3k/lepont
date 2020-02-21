@@ -39,8 +39,8 @@ class Registry implements Bridge {
     this.webView = webView
   }
 
-  onMessage = async (fromWebView: MessageWithId): Promise<unknown> => {
-    const { id, message } = fromWebView
+  onMessage = async (e: any): Promise<unknown> => {
+    const { id, message } = e.nativeEvent.data
     const { type, payload } = message
     if (!type) {
       console.error(`message type cannot be empty: ${type} is given`)

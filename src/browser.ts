@@ -34,11 +34,16 @@ class Bridge extends EventEmitter {
   /**
    * Sends a message to webview's bridge handler.
    */
-  async sendMessage<T>(m: Message): Promise<T> {
+  async sendMessage<T>(message: Message): Promise<T> {
     const id = uniqId()
     return new Promise<T>((r, _) => {
       this.resolverTable[id] = r
     })
+
+    window.postMessage({
+      id,
+      message,
+    }, "*")
   }
 }
 
