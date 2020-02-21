@@ -3,7 +3,7 @@
   A native <-> browser (webview) bridge library for react-native
 </p>
 
-Current Version: v0.1.0 (WIP)
+Current Version: v0.2.0 (WIP)
 
 # Usage
 
