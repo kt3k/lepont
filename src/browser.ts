@@ -1,4 +1,4 @@
-import { Message, MessageWithId } from './types'
+import { Message, BridgePayload } from './types'
 import { EventEmitter } from 'events'
 
 let cnt = 0
@@ -10,7 +10,7 @@ function uniqId(): number {
 }
 
 class Bridge extends EventEmitter {
-  resolverTable: { [key: string]: (arg0: any) => void } = {}
+  resolverTable: { [key: string]: [(arg0: any) => void, (arg0: any) => void] } = {}
 
   /**
    * Handles the message from the webview.
@@ -22,26 +22,33 @@ class Bridge extends EventEmitter {
   /**
    * Handles the result from the webview's BridgeHandler.
    */
-  onResult(resPayload: MessageWithId): void {
-    const { id, message } = resPayload
+  onResult(resPayload: BridgePayload): void {
+    const { id, message, error } = resPayload
     const resolver = this.resolverTable[id]
     if (!resolver) {
       console.error(`Resolver for id=${id} not found.`)
       return
     }
-    resolver(message)
+    const [resolve, reject] = resolver
+
+    if (error) {
+      reject(new Error(error.message))
+    } else {
+      const { type, payload } = message
+      resolve(payload)
+    }
   }
   /**
    * Sends a message to webview's bridge handler.
    */
   async sendMessage<T>(message: Message): Promise<T> {
     const id = uniqId()
-    window.postMessage({
+    window.postMessage(JSON.stringify({
       id,
       message,
-    }, "*")
-    return new Promise<T>((r, _) => {
-      this.resolverTable[id] = r
+    }), "*")
+    return new Promise<T>((resolve, reject) => {
+      this.resolverTable[id] = [resolve, reject]
     })
   }
 }

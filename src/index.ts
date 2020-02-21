@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Message, MessageWithId } from './types'
+import { Message, BridgePayload } from './types'
 
 type WebView = {
   injectJavaScript: (s: string) => void
@@ -40,7 +40,8 @@ class Registry implements Bridge {
   }
 
   onMessage = async (e: any): Promise<unknown> => {
-    const { id, message } = e.nativeEvent.data
+    const data = JSON.parse(e.nativeEvent.data) as BridgePayload
+    const { id, message } = data
     const { type, payload } = message
     if (!type) {
       console.error(`message type cannot be empty: ${type} is given`)
@@ -54,7 +55,7 @@ class Registry implements Bridge {
     }
 
     const res = await registrant(payload, this)
-    const resPayload = JSON.stringify({ id, res })
+    const resPayload = JSON.stringify({ id, message: { type, payload: res } })
     this.injectScript(`LePont.onResult(${resPayload})`)
   }
 

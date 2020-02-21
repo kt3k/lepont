@@ -3,7 +3,10 @@ export type Message = {
   payload: unknown
 }
 
-export type MessageWithId = {
+export type BridgePayload = {
   id: string
   message: Message
+  error?: {
+    message: string
+  }
 }
