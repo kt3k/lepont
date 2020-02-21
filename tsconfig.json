@@ -2,11 +2,11 @@
   "compilerOptions": {
     "lib": ["dom", "esnext"],
     "module": "commonjs",
-    "noImplicitAny": true,
-    "removeComments": true,
+    "target": "ES2017",
     "preserveConstEnums": true,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "outDir": "./dist"
   },
   "files": ["src/index.ts", "src/browser.ts"]
 }
