@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Message, BridgePayload } from './types'
+import { Message, BridgePayload, BridgeRequestPayload } from './types'
 
 type WebView = {
   injectJavaScript: (s: string) => void
@@ -40,7 +40,7 @@ class Registry implements Bridge {
   }
 
   onMessage = async (e: any): Promise<unknown> => {
-    const data = JSON.parse(e.nativeEvent.data) as BridgePayload
+    const data = JSON.parse(e.nativeEvent.data) as BridgeRequestPayload
     const { id, message } = data
     const { type, payload } = message
     if (!type) {
@@ -55,20 +55,25 @@ class Registry implements Bridge {
     }
 
     const res = await registrant(payload, this)
-    const resPayload = JSON.stringify({ id, message: { type, payload: res } })
-    this.injectScript(`LePont.onResult(${resPayload})`)
+    this.send({
+      type: 'result',
+      id,
+      message: { type, payload: res }
+    })
   }
 
-  sendMessage(m: Message): void {
-    const msgPayload = JSON.stringify(m)
-    this.injectScript(`LePont.onMessage(${msgPayload})`)
+  sendMessage(message: Message): void {
+    this.send({
+      type: 'event',
+      message
+    })
   }
 
-  injectScript(src: string): void {
+  send(p: BridgePayload) {
     if (!this.webView) {
       console.error('webView for lepont registry is not ready!')
       return
     }
-    this.webView.injectJavaScript(src)
+    this.webView.injectJavaScript(`LePont.recv(${JSON.stringify(p)})`)
   }
 }

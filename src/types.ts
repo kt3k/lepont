@@ -1,12 +1,25 @@
 export type Message = {
   type: string
-  payload: unknown
+  payload: any
 }
 
-export type BridgePayload = {
+export type BridgeRequestPayload = {
+  id: string
+  message: Message
+}
+
+export type BridgeResultPayload = {
+  type: 'result',
   id: string
   message: Message
   error?: {
     message: string
   }
 }
+
+export type BridgeEventPayload = {
+  type: 'event',
+  message: Message,
+}
+
+export type BridgePayload = BridgeResultPayload | BridgeEventPayload

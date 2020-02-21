@@ -1,4 +1,4 @@
-import { Message, BridgePayload } from './types'
+import { Message, BridgePayload, BridgeResultPayload } from './types'
 import { EventEmitter } from 'events'
 
 let cnt = 0
@@ -12,17 +12,31 @@ function uniqId(): number {
 class Bridge extends EventEmitter {
   resolverTable: { [key: string]: [(arg0: any) => void, (arg0: any) => void] } = {}
 
+  recv(p: BridgePayload) {
+    const type = p.type
+    switch(p.type) {
+      case 'result':
+        this.onResult(p)
+        break;
+      case 'event':
+        this.onEvent(p.message)
+        break;
+      default:
+        throw new Error(`Unknown bridge payload type ${type}`)
+    }
+  }
+
   /**
    * Handles the message from the webview.
    */
-  onMessage({ type, payload }: Message): void {
+  onEvent({ type, payload }: Message): void {
     this.emit(type, payload)
   }
 
   /**
    * Handles the result from the webview's BridgeHandler.
    */
-  onResult(resPayload: BridgePayload): void {
+  onResult(resPayload: BridgeResultPayload): void {
     const { id, message, error } = resPayload
     const resolver = this.resolverTable[id]
     if (!resolver) {
