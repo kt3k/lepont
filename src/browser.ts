@@ -1,4 +1,4 @@
-import { Message, MessageFromWebView } from './types'
+import { Message, MessageWithId } from './types'
 import { EventEmitter } from 'events'
 
 let cnt = 0
@@ -22,7 +22,7 @@ class LePont extends EventEmitter {
   /**
    * Handles the result from the webview's BridgeHandler.
    */
-  onResult(resPayload: MessageFromWebView): void {
+  onResult(resPayload: MessageWithId): void {
     const { id, message } = resPayload
     const resolver = this.resolverTable[id]
     if (!resolver) {
