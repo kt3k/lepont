@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Current Version: v0.5.0 (WIP)
+  Current Version: v0.5.1 (WIP)
 </p>
 
 You can bridge the webview and react-native by using this libary. You can consider this module as PhoneGap (Cordova) on top of react-native.
