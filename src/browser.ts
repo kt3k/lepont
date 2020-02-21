@@ -9,7 +9,7 @@ function uniqId(): number {
   return cnt++
 }
 
-class LePont extends EventEmitter {
+class Bridge extends EventEmitter {
   resolverTable: { [key: string]: (arg0: any) => void } = {}
 
   /**
@@ -42,4 +42,18 @@ class LePont extends EventEmitter {
   }
 }
 
-Object.assign(window, { LePont: new LePont() })
+const bridge = new Bridge()
+
+export function sendMessage<T>(m: Message): Promise<T> {
+  return bridge.sendMessage<T>(m)
+}
+
+export function on(type: string, cb: (arg0: any) => void) {
+  return bridge.on(type, cb)
+}
+
+export function off(type: string, cb: (arg0: any) => void) {
+  return bridge.off(type, cb)
+}
+
+Object.assign(window, { LePont: new Bridge() })
