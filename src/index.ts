@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Message, MessageWithId } from './types'
 
 type WebView = {
@@ -12,10 +12,7 @@ type Bridge = {
 type BridgeHandler<T> = (payload: T, bridge: Bridge) => unknown
 
 export function useRegistry(): Registry | null {
-  const [registry, setRegistry] = useState<Registry | null>(null)
-  useEffect(() => {
-    setRegistry(new Registry())
-  }, [])
+  const [registry, _] = useState<Registry>(new Registry())
   return registry
 }
 
@@ -38,11 +35,11 @@ class Registry implements Bridge {
     this.registry[type] = handler
   }
 
-  ref(webView: WebView) {
+  ref = (webView: WebView): void => {
     this.webView = webView
   }
 
-  async onMessage(fromWebView: MessageWithId): Promise<unknown> {
+  onMessage = async (fromWebView: MessageWithId): Promise<unknown> => {
     const { id, message } = fromWebView
     const { type, payload } = message
     if (!type) {
