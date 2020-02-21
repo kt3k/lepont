@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/kt3k/lepont/master/design/lepont.png" width="350" />
+
 # LePont v0.1.0 WIP
 
 > A native <-> browser (webview) bridge library for react-native
