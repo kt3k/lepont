@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Current Version: v0.4.0 (WIP)
+  Current Version: v0.4.1 (WIP)
 </p>
 
 # Usage
