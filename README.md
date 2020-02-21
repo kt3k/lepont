@@ -65,7 +65,7 @@ import { WebView } from 'react-native-webview'
 
 const App = () => {
   const registry = useRegistry()
-  const useBridge(registry, 'my-api', (_, bridge) => {
+  const useBridge(registry, 'start-my-stream-event', (_, bridge) => {
     setInterval(() => {
       bridge.sendMessage({
         type: 'my-stream-event',
@@ -91,9 +91,7 @@ Browser side
 ```ts
 import { sendMessage, on } from 'lepont/browser'
 
-const res = await sendMessage({
-  type: 'start-my-stream-event'
-})
+sendMessage({ type: 'start-my-stream-event' })
 
 on('my-stream-event', (payload) => {
   // This fires every second from react-native side! :)
