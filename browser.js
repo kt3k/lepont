@@ -1,1 +1,1 @@
-module.exports = require('./lib/browser')
+module.exports = require('./dist/browser')
