@@ -44,13 +44,23 @@ class Registry implements Bridge {
     const { id, message } = data
     const { type, payload } = message
     if (!type) {
-      console.error(`message type cannot be empty: ${type} is given`)
+      this.send({
+        type: 'result',
+        id,
+        message: { type, payload: undefined },
+        error: { message: `message type cannot be empty: ${type} is given` }
+      })
       return
     }
     const registrant = this.registry[type]
 
     if (!registrant) {
-      console.error(`Error: No entry for message type: ${type}`)
+      this.send({
+        type: 'result',
+        id,
+        message: { type, payload: undefined },
+        error: { message: `Error: No entry for message type: ${type}` }
+      })
       return
     }
 
