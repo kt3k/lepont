@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  Current Version: v0.6.0 (WIP)
+  Current Version: v0.6.0
 </p>
 
 > Sous le pont Mirabeau coule la Seine et nos amours -- Guillaume Apollinaire
