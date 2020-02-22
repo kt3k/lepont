@@ -164,6 +164,13 @@ You can write reusable `lepont` plugin by using the above APIs.
 
 TBD
 
+# Plugins
+
+- lepont-device-info
+  - based on [react-native-device-info](https://github.com/react-native-community/react-native-device-info)
+- lepont-communications
+  - based on [react-native-communications](https://github.com/anarchicknight/react-native-communications)
+
 # License
 
 MIT
