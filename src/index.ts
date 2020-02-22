@@ -64,12 +64,21 @@ export class Registry implements Bridge {
       return
     }
 
-    const res = await registrant(payload, this)
-    this.send({
-      type: 'result',
-      id,
-      message: { type, payload: res }
-    })
+    try {
+      const res = await registrant(payload, this)
+      this.send({
+        type: 'result',
+        id,
+        message: { type, payload: res }
+      })
+    } catch (e) {
+      this.send({
+        type: 'result',
+        id,
+        message: { type, payload: undefined },
+        error: { message: e.message }
+      })
+    }
   }
 
   sendMessage(message: Message): void {

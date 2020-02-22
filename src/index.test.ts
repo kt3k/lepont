@@ -108,6 +108,38 @@ describe('useRegistry', () => {
       )
     })
 
+    it('sends back error to the browser if the handler throws', async () => {
+      const {
+        result: { current }
+      } = renderHook(() => {
+        const registry = useRegistry()
+        useBridge(registry, 'foo', () => {
+          throw new Error('error!')
+        })
+        return registry
+      })
+
+      let script = ''
+      const mockWebView = {
+        injectJavaScript(src: string): void {
+          script = src
+        }
+      }
+
+      current.ref(mockWebView)
+      await current.onMessage(
+        genMessageEvent({
+          id: 0,
+          message: { type: 'foo' }
+        })
+      )
+
+      assert.strictEqual(
+        script,
+        'LePont.recv({"type":"result","id":0,"message":{"type":"foo"},"error":{"message":"error!"}})'
+      )
+    })
+
     it('write to error console when webView is not ready', async () => {
       let message = ''
       console.error = (msg: string) => {
