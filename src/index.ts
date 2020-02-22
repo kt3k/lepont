@@ -11,7 +11,7 @@ type Bridge = {
 
 type BridgeHandler<T> = (payload: T, bridge: Bridge) => unknown
 
-export function useRegistry(): Registry | null {
+export function useRegistry(): Registry {
   const [registry, _] = useState<Registry>(new Registry())
   return registry
 }
@@ -26,7 +26,7 @@ export function useBridge<T>(
   }, [registry])
 }
 
-class Registry implements Bridge {
+export class Registry implements Bridge {
   webView: WebView | null = null
 
   registry: { [key: string]: BridgeHandler<any> } = {}

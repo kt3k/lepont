@@ -10,17 +10,19 @@ function uniqId(): number {
 }
 
 class Bridge extends EventEmitter {
-  resolverTable: { [key: string]: [(arg0: any) => void, (arg0: any) => void] } = {}
+  resolverTable: {
+    [key: string]: [(arg0: any) => void, (arg0: any) => void]
+  } = {}
 
   recv(p: BridgePayload) {
     const type = p.type
-    switch(p.type) {
+    switch (p.type) {
       case 'result':
         this.onResult(p)
-        break;
+        break
       case 'event':
         this.onEvent(p.message)
-        break;
+        break
       default:
         throw new Error(`Unknown bridge payload type ${type}`)
     }
@@ -43,6 +45,7 @@ class Bridge extends EventEmitter {
       console.error(`Resolver for id=${id} not found.`)
       return
     }
+    delete this.resolverTable[id]
     const [resolve, reject] = resolver
 
     if (error) {
@@ -57,10 +60,13 @@ class Bridge extends EventEmitter {
    */
   async sendMessage<T>(message: Message): Promise<T> {
     const id = uniqId()
-    ;(window as any).ReactNativeWebView.postMessage(JSON.stringify({
-      id,
-      message,
-    }), "*")
+    ;(window as any).ReactNativeWebView.postMessage(
+      JSON.stringify({
+        id,
+        message
+      }),
+      '*'
+    )
     return new Promise<T>((resolve, reject) => {
       this.resolverTable[id] = [resolve, reject]
     })

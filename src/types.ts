@@ -9,7 +9,7 @@ export type BridgeRequestPayload = {
 }
 
 export type BridgeResultPayload = {
-  type: 'result',
+  type: 'result'
   id: string
   message: Message
   error?: {
@@ -18,8 +18,8 @@ export type BridgeResultPayload = {
 }
 
 export type BridgeEventPayload = {
-  type: 'event',
-  message: Message,
+  type: 'event'
+  message: Message
 }
 
 export type BridgePayload = BridgeResultPayload | BridgeEventPayload
