@@ -58,7 +58,7 @@ describe('sendMessage', () => {
 describe('on', () => {
   it('subscribes to the given event from the react-native side', () => {
     let payload = null
-    on('stream-event', (p) => {
+    on('stream-event', p => {
       payload = p
     })
 
@@ -73,7 +73,9 @@ describe('on', () => {
   describe('off', () => {
     it('unsubscribe from the event', () => {
       let payload = null
-      const handler = (p: unknown) => { payload = p }
+      const handler = (p: unknown) => {
+        payload = p
+      }
       on('stream-event', handler)
       off('stream-event', handler)
 
