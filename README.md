@@ -162,6 +162,8 @@ Unregisters the handler from the event of the given `type` name.
 
 You can write reusable `lepont` plugin by using the above APIs.
 
+TBD
+
 # License
 
 MIT
