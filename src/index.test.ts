@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as assert from 'assert'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react-hooks'
 import { useRegistry, Registry, useBridge } from './'
 
 const genMessageEvent = (obj: unknown) => {
