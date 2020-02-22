@@ -6,14 +6,17 @@
 </p>
 
 <p align="center">
+  <img src="https://github.com/kt3k/lepont/workflows/ci/badge.svg?branch=master">
+  <a href="https://codecov.io/gh/kt3k/lepont">
+    <img src="https://codecov.io/gh/kt3k/lepont/branch/master/graph/badge.svg" />
+  </a>
+</p>
+
+<p align="center">
   Current Version: v0.5.3 (WIP)
 </p>
 
-> > Sous le pont Mirabeau coule la Seine et nos amours
->
-> Guillaume Apollinaire
-
-
+> Sous le pont Mirabeau coule la Seine et nos amours -- Guillaume Apollinaire
 
 You can bridge the webview and react-native by using this libary. You can consider this module as PhoneGap (Cordova) on top of react-native.
 
