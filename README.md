@@ -9,9 +9,9 @@
   Current Version: v0.5.3 (WIP)
 </p>
 
-> Sous le pont Mirabeau coule la Seine et nos amours
+> > Sous le pont Mirabeau coule la Seine et nos amours
 >
-> - Guillaume Apollinaire
+> Guillaume Apollinaire
 
 
 
