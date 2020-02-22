@@ -44,8 +44,8 @@ const double = (n) => new Promise((resolve, _) => {
 
 const App = () => {
   const registry = useRegistry()
-  const useBridge(registry, 'my-api', (payload, _) => {
-    return double(payload.foo)
+  useBridge(registry, 'my-api', async (payload, _) => {
+    return await double(payload.foo)
   })
 
   return (
@@ -82,7 +82,7 @@ import { WebView } from 'react-native-webview'
 
 const App = () => {
   const registry = useRegistry()
-  const useBridge(registry, 'start-my-stream-event', (_, bridge) => {
+  useBridge(registry, 'start-my-stream-event', (_, bridge) => {
     setInterval(() => {
       bridge.sendMessage({
         type: 'my-stream-event',
