@@ -64,8 +64,7 @@ class Bridge extends EventEmitter {
       JSON.stringify({
         id,
         message
-      }),
-      '*'
+      })
     )
     return new Promise<T>((resolve, reject) => {
       this.resolverTable[id] = [resolve, reject]
