@@ -8,6 +8,7 @@
     "index.js",
     "browser.js",
     "dist",
+    "types",
     "src"
   ],
   "scripts": {
