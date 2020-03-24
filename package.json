@@ -3,6 +3,7 @@
   "version": "0.7.0",
   "description": "A native <-> browser (webview) bridge library for react-native",
   "main": "index.js",
+  "types": "./types",
   "files": [
     "index.js",
     "browser.js",
@@ -15,7 +16,8 @@
     "clean": "rimraf dist",
     "prepublish": "npm run clean && npm run dist",
     "fmt": "prettier --write src/*.ts *.json *.js",
-    "dist": "tsc"
+    "dist": "tsc -p .",
+    "types": "tsc --declaration --emitDeclarationOnly --declarationDir ./types -p ."
   },
   "repository": {
     "type": "git",
