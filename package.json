@@ -15,10 +15,9 @@
     "test": "jest",
     "cov": "jest --coverage",
     "clean": "rimraf dist types",
-    "prepublish": "npm run clean && npm run dist && npm run types",
+    "prepublish": "npm run clean && npm run dist",
     "fmt": "prettier --write src/*.ts *.json *.js",
-    "dist": "tsc -p .",
-    "types": "tsc --declaration --emitDeclarationOnly --declarationDir ./types -p ."
+    "dist": "tsc -p ."
   },
   "repository": {
     "type": "git",

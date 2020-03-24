@@ -6,7 +6,9 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "strict": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./types"
   },
   "files": ["src/index.ts", "src/browser.ts"]
 }
