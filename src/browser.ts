@@ -14,7 +14,7 @@ class Bridge extends EventEmitter {
     [key: string]: [(arg0: any) => void, (arg0: any) => void]
   } = {}
 
-  recv(p: BridgePayload) {
+  recv<T, S>(p: BridgePayload<T, S>) {
     const type = p.type
     switch (p.type) {
       case 'result':
@@ -31,14 +31,14 @@ class Bridge extends EventEmitter {
   /**
    * Handles the message from the webview.
    */
-  onEvent({ type, payload }: Message): void {
+  onEvent<T>({ type, payload }: Message<T>): void {
     this.emit(type, payload)
   }
 
   /**
    * Handles the result from the webview's BridgeHandler.
    */
-  onResult(resPayload: BridgeResultPayload): void {
+  onResult<T>(resPayload: BridgeResultPayload<T>): void {
     const { id, message, error } = resPayload
     const resolver = this.resolverTable[id]
     if (!resolver) {
@@ -58,7 +58,7 @@ class Bridge extends EventEmitter {
   /**
    * Sends a message to webview's bridge handler.
    */
-  async sendMessage<T>(message: Message): Promise<T> {
+  async sendMessage<T, S>(message: Message<S>): Promise<T> {
     const id = uniqId()
     ;(window as any).ReactNativeWebView.postMessage(
       JSON.stringify({
@@ -74,8 +74,8 @@ class Bridge extends EventEmitter {
 
 const bridge = new Bridge()
 
-export function sendMessage<T>(m: Message): Promise<T> {
-  return bridge.sendMessage<T>(m)
+export function sendMessage<T, S>(m: Message<S>): Promise<T> {
+  return bridge.sendMessage<T, S>(m)
 }
 
 export function on(type: string, cb: (arg0: any) => void) {

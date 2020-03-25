@@ -5,8 +5,8 @@ type WebView = {
   injectJavaScript: (s: string) => void
 }
 
-type Bridge = {
-  sendMessage: (m: Message) => void
+export type Bridge = {
+  sendMessage: <T>(m: Message<T>) => void
 }
 
 type BridgeHandler<T> = (payload: T, bridge: Bridge) => unknown
@@ -39,8 +39,8 @@ export class Registry implements Bridge {
     this.webView = webView
   }
 
-  onMessage = async (e: any): Promise<unknown> => {
-    const data = JSON.parse(e.nativeEvent.data) as BridgeRequestPayload
+  onMessage = async <T>(e: any): Promise<unknown> => {
+    const data = JSON.parse(e.nativeEvent.data) as BridgeRequestPayload<T>
     const { id, message } = data
     const { type, payload } = message
     if (!type) {
@@ -81,14 +81,14 @@ export class Registry implements Bridge {
     }
   }
 
-  sendMessage(message: Message): void {
+  sendMessage<T>(message: Message<T>): void {
     this.send({
       type: 'event',
       message
     })
   }
 
-  send(p: BridgePayload) {
+  send<T, S>(p: BridgePayload<T, S>) {
     if (!this.webView) {
       console.error('webView for lepont registry is not ready!')
       return
