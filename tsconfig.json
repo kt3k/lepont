@@ -10,5 +10,9 @@
     "declaration": true,
     "declarationDir": "./types"
   },
-  "files": ["src/index.ts", "src/browser.ts"]
+  "files": [
+    "src/index.ts",
+    "src/mock.ts",
+    "src/browser.ts"
+  ]
 }
