@@ -39,7 +39,7 @@ export class Registry implements Bridge {
     this.webView = webView
   }
 
-  onMessage = async <T>(e: any): Promise<unknown> => {
+  onMessage = async <T>(e: any): Promise<void> => {
     const data = JSON.parse(e.nativeEvent.data) as BridgeRequestPayload<T>
     const { id, message } = data
     const { type, payload } = message
