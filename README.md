@@ -164,13 +164,25 @@ You can write reusable `lepont` plugin by using the above APIs.
 
 TBD
 
-# Plugins
+# Official Plugins
 
-- lepont-device-info
+- [@lepont/async-storage][]
+  - Use [AsyncStorage][] from browser. You can store up to 6MB data for your app.
+
+# TODO Plugins
+- `@lepont/share`
+  - You can share the message, image, etc from your browser
+  - based on react-native's [Share API](https://reactnative.dev/docs/share)
+- `@lepont/device-info`
+  - Access device information from browser
   - based on [react-native-device-info](https://github.com/react-native-community/react-native-device-info)
-- lepont-communications
+- `@lepont/communications`
+  - Communication utilities
   - based on [react-native-communications](https://github.com/anarchicknight/react-native-communications)
 
 # License
 
 MIT
+
+[@lepont/async-storage]: https://github.com/kt3k/lepont-async-storage
+[AsyncStorage]: https://github.com/react-native-community/async-storage
