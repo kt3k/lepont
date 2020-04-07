@@ -1,4 +1,4 @@
-import { sendMessage, on, off } from './browser'
+import { sendMessage, on, off, checkEnvironment } from './browser'
 import * as assert from 'assert'
 
 const g = window as any
@@ -125,5 +125,17 @@ describe('LePont.recv', () => {
     assert.throws(() => {
       g.LePont.recv({ type: 'foo' })
     })
+  })
+})
+
+describe('checkEnvironment', () => {
+  it('does nothing if ReactNativeWebView is object', () => {
+    checkEnvironment({ ReactNativeWebView: {} })
+  })
+
+  it('throws if ReactNativeWebView is undefind', () => {
+    expect(() => {
+      checkEnvironment({ ReactNativeWebView: undefined })
+    }).toThrow()
   })
 })
