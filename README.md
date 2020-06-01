@@ -167,12 +167,11 @@ TBD
 # Official Plugins
 
 - [@lepont/async-storage][]
-  - Use [AsyncStorage][] from browser. You can store up to 6MB data for your app.
+  - Store data up to 6MB.
+- [@lepont/share][]
+  - Share text and/or files from the browser.
 
-# TODO Plugins
-- `@lepont/share`
-  - You can share the message, image, etc from your browser
-  - based on react-native's [Share API](https://reactnative.dev/docs/share)
+# TODO Plugins (contributions welcome)
 - `@lepont/device-info`
   - Access device information from browser
   - based on [react-native-device-info](https://github.com/react-native-community/react-native-device-info)
@@ -185,4 +184,5 @@ TBD
 MIT
 
 [@lepont/async-storage]: https://github.com/kt3k/lepont-async-storage
+[@lepont/share]: https://github.com/kt3k/lepont-share
 [AsyncStorage]: https://github.com/react-native-community/async-storage
