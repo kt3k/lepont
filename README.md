@@ -38,22 +38,29 @@ On react-native side
 import { useBridge, useRegistry } from 'lepont'
 import { WebView } from 'react-native-webview'
 
-const double = (n) => new Promise((resolve, _) => {
-  setTimeout(() => resolve(n * 2), 300)
+type Payload = {
+  foo: number
+}
+
+// This is your bridge implementation
+const myBridgeImpl = (payload: MyPayload) => new Promise((resolve) => {
+  setTimeout(() => resolve(payload.foo * 2), 300)
 })
 
 const App = () => {
   const registry = useRegistry()
-  useBridge(registry, 'my-api', async (payload, _) => {
-    return await double(payload.foo)
-  })
+  // Registers your bridge by the name `my-bridge`
+  useBridge(registry, 'my-api', myBridgeImpl)
 
   return (
     <WebView
+      // Loads the html which uses your bridge.
       source={{ uri: 'Web.bundle/index.html' }}
-      javaScriptEnabled={true}
+      // Needed for sending the message from browser
       ref={registry.ref}
+      // Needed for receiving the message from browser
       onMessage={registry.onMessage}
+      javaScriptEnabled
     />
   )
 }
@@ -66,7 +73,7 @@ Browser side
 import { sendMessage } from 'lepont/browser'
 
 const res = await sendMessage({
-  type: 'my-api',
+  type: 'my-bridge',
   payload: { foo: 42 }
 })
 // => res is now 84 after 300ms. It's doubled on react-native side! :)
@@ -82,10 +89,10 @@ import { WebView } from 'react-native-webview'
 
 const App = () => {
   const registry = useRegistry()
-  useBridge(registry, 'start-my-stream-event', (_, bridge) => {
+  useBridge(registry, 'my-streaming-bridge', (_, bridge) => {
     setInterval(() => {
       bridge.sendMessage({
-        type: 'my-stream-event',
+        type: 'my-streaming-event',
         payload: 'stream data!',
       })
     }, 1000)
@@ -94,9 +101,9 @@ const App = () => {
   return (
     <WebView
       source={{ uri: 'Web.bundle/index.html' }}
-      javaScriptEnabled={true}
       ref={registry.ref}
       onMessage={registry.onMessage}
+      javaScriptEnabled
     />
   )
 }
@@ -108,9 +115,10 @@ Browser side
 ```ts
 import { sendMessage, on } from 'lepont/browser'
 
-sendMessage({ type: 'start-my-stream-event' })
+// This triggers the event streaming
+sendMessage({ type: 'my-streaming-bridge' })
 
-on('my-stream-event', (payload) => {
+on('my-streaming-event', (payload) => {
   // This fires every second from react-native side! :)
   console.log(`payload=${payload}`)
 })
