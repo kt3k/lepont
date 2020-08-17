@@ -43,7 +43,7 @@ type Payload = {
 }
 
 // This is your bridge implementation
-const myBridgeImpl = (payload: MyPayload) => new Promise((resolve) => {
+const myBridgeImpl = (payload: Payload) => new Promise((resolve) => {
   setTimeout(() => resolve(payload.foo * 2), 300)
 })
 
