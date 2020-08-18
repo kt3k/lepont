@@ -9,29 +9,30 @@ export type Bridge = {
   sendMessage: <T>(m: Message<T>) => void
 }
 
-type BridgeHandler<T> = (payload: T, bridge: Bridge) => unknown
+export type BridgeImpl<T> = (payload: T, bridge: Bridge) => unknown
 
-export function useRegistry(): Registry {
-  const [registry, _] = useState<Registry>(new Registry())
-  return registry
-}
+export type BridgeOption = (registry: Registry) => unknown
 
-export function useBridge<T>(
-  registry: Registry,
-  type: string,
-  handler: BridgeHandler<T>
-) {
+type WebViewRef = (wv: WebView) => void
+// TODO: type event object
+type WebViewOnMessage = (event: any) => unknown
+
+export function useBridge(
+  ...options: BridgeOption[]
+): [WebViewRef, WebViewOnMessage] {
+  const [registry] = useState<Registry>(() => new Registry())
   useEffect(() => {
-    registry.register(type, handler)
-  }, [registry])
+    options.forEach(option => option(registry))
+  }, [registry, ...options])
+  return [registry.ref, registry.onMessage]
 }
 
 export class Registry implements Bridge {
   webView: WebView | null = null
 
-  registry: { [key: string]: BridgeHandler<any> } = {}
+  registry: { [key: string]: BridgeImpl<any> } = {}
 
-  register(type: string, handler: BridgeHandler<any>) {
+  register<T>(type: string, handler: BridgeImpl<T>) {
     this.registry[type] = handler
   }
 
