@@ -50,7 +50,7 @@ const myBridgeImpl = (payload: Payload) => new Promise((resolve) => {
 const App = () => {
   // Registers your bridge by the name `my-bridge`
   const [ref, onMessage] = useBridge((registry) => {
-    registry.register('my-api', myBridgeImpl)
+    registry.register('my-bridge', myBridgeImpl)
   })
 
   return (
