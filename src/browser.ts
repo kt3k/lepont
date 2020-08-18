@@ -90,7 +90,9 @@ Object.assign(window, { LePont: bridge })
 
 export function checkEnvironment(w: any = window): void {
   if (typeof w.ReactNativeWebView === 'undefined') {
-    throw new Error('ReactNativeWebView is undefined. Did you set onMessage of WebView?')
+    throw new Error(
+      'ReactNativeWebView is undefined. Did you set onMessage of WebView?'
+    )
   }
 }
 

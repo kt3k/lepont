@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as assert from 'assert'
 import { renderHook } from '@testing-library/react-hooks'
-import { useRegistry, Registry, useBridge } from './'
+import { Registry, useBridge, Bridge } from './'
 
 const genMessageEvent = (obj: unknown) => {
   return {
@@ -11,26 +11,37 @@ const genMessageEvent = (obj: unknown) => {
   }
 }
 
-describe('useRegistry', () => {
-  it('returns a registry of native bridge handlers', () => {
-    const {
-      result: { current }
-    } = renderHook(() => useRegistry())
+describe('useBridge', () => {
+  it('returns ref and onMessage method of registry object', () => {
+    let registry: Registry
 
-    assert(current instanceof Registry)
+    const {
+      result: {
+        current: [ref, onMessage]
+      }
+    } = renderHook(() =>
+      useBridge(registry_ => {
+        registry = registry_
+      })
+    )
+
+    assert(registry!.ref === ref)
+    assert(registry!.onMessage === onMessage)
   })
 
   describe('registry.onMessage', () => {
     it('invokes corresponding handler and sends back result to the browser', async () => {
       const {
-        result: { current }
-      } = renderHook(() => {
-        const registry = useRegistry()
-        useBridge<{ abc: number }>(registry, 'foo', async payload => {
-          return { def: payload.abc * 2 }
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() =>
+        useBridge(registry => {
+          registry.register<{ abc: number }>('foo', async payload => {
+            return { def: payload.abc * 2 }
+          })
         })
-        return registry
-      })
+      )
 
       let script = ''
       const mockWebView = {
@@ -39,8 +50,8 @@ describe('useRegistry', () => {
         }
       }
 
-      current.ref(mockWebView)
-      await current.onMessage(
+      ref(mockWebView)
+      await onMessage(
         genMessageEvent({
           id: 0,
           message: {
@@ -58,8 +69,10 @@ describe('useRegistry', () => {
 
     it('sends back error to the browser if message type is empty', async () => {
       const {
-        result: { current }
-      } = renderHook(() => useRegistry())
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() => useBridge())
 
       let script = ''
       const mockWebView = {
@@ -68,8 +81,8 @@ describe('useRegistry', () => {
         }
       }
 
-      current.ref(mockWebView)
-      await current.onMessage(
+      ref(mockWebView)
+      await onMessage(
         genMessageEvent({
           id: 0,
           message: { type: '' }
@@ -84,8 +97,10 @@ describe('useRegistry', () => {
 
     it('sends back error to the browser if message type is not registered', async () => {
       const {
-        result: { current }
-      } = renderHook(() => useRegistry())
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() => useBridge())
 
       let script = ''
       const mockWebView = {
@@ -94,8 +109,8 @@ describe('useRegistry', () => {
         }
       }
 
-      current.ref(mockWebView)
-      await current.onMessage(
+      ref(mockWebView)
+      await onMessage(
         genMessageEvent({
           id: 0,
           message: { type: 'foo' }
@@ -110,14 +125,16 @@ describe('useRegistry', () => {
 
     it('sends back error to the browser if the handler throws', async () => {
       const {
-        result: { current }
-      } = renderHook(() => {
-        const registry = useRegistry()
-        useBridge(registry, 'foo', () => {
-          throw new Error('error!')
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() =>
+        useBridge(registry => {
+          registry.register('foo', () => {
+            throw new Error('error!')
+          })
         })
-        return registry
-      })
+      )
 
       let script = ''
       const mockWebView = {
@@ -126,8 +143,8 @@ describe('useRegistry', () => {
         }
       }
 
-      current.ref(mockWebView)
-      await current.onMessage(
+      ref(mockWebView)
+      await onMessage(
         genMessageEvent({
           id: 0,
           message: { type: 'foo' }
@@ -146,14 +163,16 @@ describe('useRegistry', () => {
         message = msg
       }
       const {
-        result: { current }
-      } = renderHook(() => {
-        const registry = useRegistry()
-        useBridge(registry, 'foo', () => {})
-        return registry
-      })
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() =>
+        useBridge(registry => {
+          registry.register('foo', () => {})
+        })
+      )
 
-      await current.onMessage(
+      await onMessage(
         genMessageEvent({
           id: 0,
           message: { type: 'foo' }
@@ -167,8 +186,19 @@ describe('useRegistry', () => {
   describe('bridge.sendMessage', () => {
     it('sends event message to the browser', () => {
       const {
-        result: { current }
-      } = renderHook(() => useRegistry())
+        result: {
+          current: [ref, onMessage]
+        }
+      } = renderHook(() =>
+        useBridge(registry =>
+          registry.register('my-bridge', (_payload, bridge) => {
+            bridge.sendMessage({
+              type: 'stream-data',
+              payload: 'data'
+            })
+          })
+        )
+      )
 
       let script = ''
       const mockWebView = {
@@ -176,12 +206,14 @@ describe('useRegistry', () => {
           script = src
         }
       }
-      current.ref(mockWebView)
+      ref(mockWebView)
 
-      current.sendMessage({
-        type: 'stream-data',
-        payload: 'data'
-      })
+      onMessage(
+        genMessageEvent({
+          id: 0,
+          message: { type: 'my-bridge' }
+        })
+      )
 
       assert.strictEqual(
         script,

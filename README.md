@@ -35,7 +35,7 @@ yarn add lepont
 On react-native side
 
 ```tsx
-import { useBridge, useRegistry } from 'lepont'
+import { useBridge } from 'lepont'
 import { WebView } from 'react-native-webview'
 
 type Payload = {
@@ -48,18 +48,19 @@ const myBridgeImpl = (payload: Payload) => new Promise((resolve) => {
 })
 
 const App = () => {
-  const registry = useRegistry()
   // Registers your bridge by the name `my-bridge`
-  useBridge(registry, 'my-api', myBridgeImpl)
+  const [ref, onMessage] = useBridge((registry) => {
+    registry.register('my-api', myBridgeImpl)
+  })
 
   return (
     <WebView
       // Loads the html which uses your bridge.
       source={{ uri: 'Web.bundle/index.html' }}
       // Needed for sending the message from browser
-      ref={registry.ref}
+      ref={ref}
       // Needed for receiving the message from browser
-      onMessage={registry.onMessage}
+      onMessage={onMessage}
       javaScriptEnabled
     />
   )
@@ -84,18 +85,19 @@ const res = await sendMessage({
 On react-native side
 
 ```tsx
-import { useBridge, useRegistry } from 'lepont'
+import { useBridge } from 'lepont'
 import { WebView } from 'react-native-webview'
 
 const App = () => {
-  const registry = useRegistry()
-  useBridge(registry, 'my-streaming-bridge', (_, bridge) => {
-    setInterval(() => {
-      bridge.sendMessage({
-        type: 'my-streaming-event',
-        payload: 'stream data!',
-      })
-    }, 1000)
+  const [ref, onMessage] = useBridge((registry) => {
+    registry.register('my-streaming-bridge', (_, bridge) => {
+      setInterval(() => {
+        bridge.sendMessage({
+          type: 'my-streaming-event',
+          payload: 'stream data!',
+        })
+      }, 1000)
+    })
   })
 
   return (
@@ -130,23 +132,33 @@ on('my-streaming-event', (payload) => {
 
 `lepont` module is for react-native side.
 
-### `useRegistry(): Registry`
+### `useBridge(...bridgeOptions: BridgeOption[]): [WebViewRef, WebViewOnMessage]`
 
-React Hook. It returns a `lepont` handler registry. You can register handlers on this registry.
+Registers the bridge to the registry by the given `BridgeOption`s. This returns `ref` and `onMessage` of WebView. You need to set these to `WebView` component to communicate with it.
 
-### `useBridge<T>(registry: Registry, type: string, handler: BridgeHandler<T>)`
+example:
 
-Registers the handler to the registry by the given `type` name.
+```tsx
+const [ref, onMessage] = useBridge(registry => {
+  registry.register('my-bridge', MyBridgeImpl)
+})
 
-### `registry.ref`
+return <WebView ref={ref} onMessage={onMessage} />
+```
 
-You should pass this to `<WebView />`'s `ref` prop.
+### `type BridgeOption = (registry: Registry) => unknown`
 
-### `registry.onMessage`
+You can pass BridgeOpion functional option to `useBridge` hook. In this function you can register your bridge type and implementation through `registry.register` method.
 
-You should pass this to `<WebView />`'s `onMessage` prop.
+### `Registry.register<T>(type: string, impl: BridgeImpl<T>): void`
 
-### `bridge.sendMessage(message: Message)`
+You can register your bridge type and implementation with this method.
+
+### `type BridgeImpl = <T>(payload: T, brdige: Bridge) => unknown`
+
+This is the type of bridge implemetation. The 1st param is the payload of your bridge call. The second param is the bridge object. The returned value is serialized and sent back to browser as the result of bridge call. If you like to send back data multiple times to browser you can use `bridge.sendMessage` method.
+
+### `bridge.sendMessage(message: Message): void`
 
 Sends the message to browser side. To handle this message, you can register `on(type, handler)` call on browser side.
 
