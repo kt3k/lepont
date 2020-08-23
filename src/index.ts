@@ -22,6 +22,7 @@ export function useBridge(
 ): [WebViewRef, WebViewOnMessage, { registry: Registry }] {
   const [registry] = useState<Registry>(() => new Registry())
   useEffect(() => {
+    registry.clear()
     options.forEach(option => option(registry))
   }, [registry, ...options])
   return [registry.ref, registry.onMessage, { registry }]
@@ -38,6 +39,10 @@ export class Registry implements Bridge {
 
   ref = (webView: WebView): void => {
     this.webView = webView
+  }
+
+  clear = (): void => {
+    this.registry = {}
   }
 
   onMessage = async <T>(e: any): Promise<void> => {
