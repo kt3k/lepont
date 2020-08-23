@@ -103,8 +103,8 @@ const App = () => {
   return (
     <WebView
       source={{ uri: 'Web.bundle/index.html' }}
-      ref={registry.ref}
-      onMessage={registry.onMessage}
+      ref={ref}
+      onMessage={onMessage}
       javaScriptEnabled
     />
   )
