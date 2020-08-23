@@ -19,12 +19,12 @@ type WebViewOnMessage = (event: any) => unknown
 
 export function useBridge(
   ...options: BridgeOption[]
-): [WebViewRef, WebViewOnMessage] {
+): [WebViewRef, WebViewOnMessage, { registry: Registry }] {
   const [registry] = useState<Registry>(() => new Registry())
   useEffect(() => {
     options.forEach(option => option(registry))
   }, [registry, ...options])
-  return [registry.ref, registry.onMessage]
+  return [registry.ref, registry.onMessage, { registry }]
 }
 
 export class Registry implements Bridge {

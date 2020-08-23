@@ -132,7 +132,7 @@ on('my-streaming-event', (payload) => {
 
 `lepont` module is for react-native side.
 
-### `useBridge(...bridgeOptions: BridgeOption[]): [WebViewRef, WebViewOnMessage]`
+### `useBridge(...bridgeOptions: BridgeOption[]): [WebViewRef, WebViewOnMessage, { registry: Registry }]`
 
 Registers the bridge to the registry by the given `BridgeOption`s. This returns `ref` and `onMessage` of WebView. You need to set these to `WebView` component to communicate with it.
 
