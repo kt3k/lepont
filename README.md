@@ -192,6 +192,8 @@ TBD
   - Share text and/or files from the browser.
 
 # TODO Plugins (contributions welcome)
+- `@lepont/cameraroll`
+  - Wrapper of `@react-native-community/cameraroll`
 - `@lepont/device-info`
   - Access device information from browser
   - based on [react-native-device-info](https://github.com/react-native-community/react-native-device-info)
