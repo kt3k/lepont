@@ -11,7 +11,7 @@
     "build": "parcel build script.ts && cp dist/script.js html/Web.bundle/script.js"
   },
   "dependencies": {
-    "lepont": "^0.10.1",
+    "lepont": "^0.11.0",
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-webview": "^8.1.1"
