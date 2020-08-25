@@ -13,7 +13,7 @@ export type BridgeImpl<T> = (payload: T, bridge: Bridge) => unknown
 
 export type BridgeOption = (registry: Registry) => unknown
 
-type WebViewRef = (wv: WebView) => void
+type WebViewRef = (wv: WebView | null) => void
 // TODO: type event object
 type WebViewOnMessage = (event: any) => unknown
 
@@ -37,7 +37,7 @@ export class Registry implements Bridge {
     this.registry[type] = handler
   }
 
-  ref = (webView: WebView): void => {
+  ref = (webView: WebView | null): void => {
     this.webView = webView
   }
 
