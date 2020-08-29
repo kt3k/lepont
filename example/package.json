@@ -8,7 +8,8 @@
     "web": "parcel index.html",
     "ios": "npm run build && npx react-native run-ios",
     "android": "npm run build && npx react-native run-android",
-    "build": "parcel build script.ts && cp dist/script.js html/Web.bundle/script.js"
+    "build": "parcel build script.ts && cp dist/script.js html/Web.bundle/script.js",
+    "fmt": ""
   },
   "dependencies": {
     "lepont": "^0.11.0",
@@ -25,6 +26,7 @@
     "metro-react-native-babel-preset": "0.54.1",
     "parcel-bundler": "^1.12.4",
     "pod-install": "^0.1.10",
+    "prettier": "^2.1.1",
     "typescript": "^3.6.3"
   }
 }

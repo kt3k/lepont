@@ -1,11 +1,42 @@
 import { sendMessage, on } from 'lepont/browser'
 
-function sendFoo() {
-  addMessage('Hello!')
+function onReceive(msg) {
+  addMessage(`received "${msg}"`)
+}
+
+function sendHello() {
+  addHr()
+  addMessage('sending "hello"')
   sendMessage({
-    type: 'foo',
-    payload: { "Hello, world!": "through LePont bridge" }
-  }).catch(e => alert(e))
+    type: 'hello',
+    payload: {},
+  }).then(onReceive).catch((e) => alert(e))
+}
+
+function sendVibration() {
+  addHr()
+  addMessage('sending "vibration"')
+  sendMessage({
+    type: 'vibration',
+    payload: {},
+  }).catch((e) => alert(e))
+}
+
+function sendStreaming() {
+  const n = +qs('.streaming-count').value
+  if (!n) {
+    alert('invalid number of streaming-count ' + n)
+  }
+  addHr()
+  addMessage('sending "streaming"')
+  sendMessage({
+    type: 'streaming',
+    payload: { n },
+  }).catch((e) => alert(e))
+}
+
+function addHr() {
+  document.body.appendChild(document.createElement('hr'))
 }
 
 function addMessage(msg) {
@@ -14,18 +45,16 @@ function addMessage(msg) {
   document.body.appendChild(div)
 }
 
-on('bar', (p) => {
-  addMessage(JSON.stringify(p))
+on('streaming-response', (p) => {
+  onReceive(JSON.stringify(p))
 })
 
 const qs = (q) => document.querySelector(q)
 
-function initEvents() {
-  qs('.inf-btn').addEventListener('click', sendFoo)
-}
-
 function main() {
-  initEvents()
+  qs('.hello-btn').addEventListener('click', sendHello)
+  qs('.vibration-btn').addEventListener('click', sendVibration)
+  qs('.streaming-btn').addEventListener('click', sendStreaming)
 }
 
 setTimeout(main, 500)
