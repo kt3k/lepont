@@ -34,34 +34,30 @@ npm install --save lepont
 yarn add lepont
 ```
 
-On react-native side
+Let's vibrate your phone from browser (using React Native's Vibration module).
+
+On react-native side:
 
 ```tsx
 import { useBridge } from 'lepont'
+import { Vibration } from 'react-native'
 import { WebView } from 'react-native-webview'
 
-type Payload = {
-  foo: number
-}
-
-// This is your bridge implementation
-const myBridgeImpl = (payload: Payload) => new Promise((resolve) => {
-  setTimeout(() => resolve(payload.foo * 2), 300)
-})
-
 const App = () => {
-  // Registers your bridge by the name `my-bridge`
-  const [ref, onMessage] = useBridge((registry) => {
-    registry.register('my-bridge', myBridgeImpl)
-  })
+  const [ref, onMessage] = useBridge(
+    (registry) => {
+      // Registers the `vibrate` handler on react-native side
+      registry.register('vibrate', () => Vibration.vibrate(1000))
+    }
+  )
 
   return (
     <WebView
-      // Loads the html which uses your bridge.
+      // Loads html.
       source={{ uri: 'Web.bundle/index.html' }}
-      // Needed for sending the message from browser
+      // Sets "ref" to send the messages to the browser
       ref={ref}
-      // Needed for receiving the message from browser
+      // Sets "onMessage" to receive the messages from the browser
       onMessage={onMessage}
       javaScriptEnabled
     />
@@ -71,18 +67,17 @@ const App = () => {
 export default App
 ```
 
-Browser side
+Then send `vibrate` message from the browser:
+
 ```ts
 import { sendMessage } from 'lepont/browser'
 
-const res = await sendMessage({
-  type: 'my-bridge',
-  payload: { foo: 42 }
-})
-// => res is now 84 after 300ms. It's doubled on react-native side! :)
+await sendMessage({ type: 'vibrate' })
 ```
 
-## Multiple events from react-native side
+This makes the phone vibrate for 1000 milliseconds! 👍
+
+## Sends multiple events from react-native side
 
 On react-native side
 
@@ -92,10 +87,10 @@ import { WebView } from 'react-native-webview'
 
 const App = () => {
   const [ref, onMessage] = useBridge((registry) => {
-    registry.register('my-streaming-bridge', (_, bridge) => {
+    registry.register('streaming-message', (_, bridge) => {
       setInterval(() => {
         bridge.sendMessage({
-          type: 'my-streaming-event',
+          type: 'streaming-event',
           payload: 'stream data!',
         })
       }, 1000)
@@ -120,9 +115,9 @@ Browser side
 import { sendMessage, on } from 'lepont/browser'
 
 // This triggers the event streaming
-sendMessage({ type: 'my-streaming-bridge' })
+sendMessage({ type: 'streaming-message' })
 
-on('my-streaming-event', (payload) => {
+on('streaming-event', (payload) => {
   // This fires every second from react-native side! :)
   console.log(`payload=${payload}`)
 })
