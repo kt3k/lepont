@@ -16,11 +16,13 @@
   Current Version: v0.11.3
 </p>
 
-> Sous le pont Mirabeau coule la Seine et nos amours -- Guillaume Apollinaire
+> Sous **le pont** Mirabeau coule la Seine et nos amours -- Guillaume Apollinaire
 
-You can bridge the webview and react-native by using this libary. You can consider this module as PhoneGap (Cordova) on top of react-native.
+Note: `LePont` (le pont) means "the bridge" in French.
 
-See [this article](https://medium.com/@caphun/react-native-load-local-static-site-inside-webview-2b93eb1c4225) for how to bundle the static web assets in your react-native apps.
+You can bridge the webview and react-native by using `lepont`. You can consider `lepont` as PhoneGap (Cordova) on top of react-native.
+
+React Native already have large swathe of library ecosystem. You can leverage its power from browser by using `lepont` 👍
 
 # Usage
 
@@ -125,6 +127,12 @@ on('my-streaming-event', (payload) => {
   console.log(`payload=${payload}`)
 })
 ```
+
+# Package html in the App
+
+You can package your html and all other assets (css, js) into your app, and we strongly recommend that strategy for reducing significantly the app load time.
+
+See [this article](https://medium.com/@caphun/react-native-load-local-static-site-inside-webview-2b93eb1c4225) for how to bundle the static web assets in your react-native apps.
 
 # API
 
