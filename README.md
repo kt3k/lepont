@@ -192,11 +192,15 @@ TBD
 - [@lepont/async-storage][]
   - Store data up to 6MB.
 - [@lepont/share][]
-  - Share text and/or files from the browser.
+  - Share text and files.
+- [@lepont/permissions-android][]
+  - Check and request permissions on Android devices.
 
 # TODO Plugins (contributions welcome)
 - `@lepont/cameraroll`
   - Wrapper of `@react-native-community/cameraroll`
+- `@lepont/fs`
+  - Wrapper of `react-native-fs`
 - `@lepont/device-info`
   - Access device information from browser
   - based on [react-native-device-info](https://github.com/react-native-community/react-native-device-info)
@@ -210,4 +214,5 @@ MIT
 
 [@lepont/async-storage]: https://github.com/kt3k/lepont-async-storage
 [@lepont/share]: https://github.com/kt3k/lepont-share
+[@lepont/permissions-android]: https://github.com/kt3k/lepont-permissions-android
 [AsyncStorage]: https://github.com/react-native-community/async-storage
