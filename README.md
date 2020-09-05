@@ -185,7 +185,14 @@ Unregisters the handler from the event of the given `type` name.
 
 You can write reusable `lepont` plugin by using the above APIs.
 
-TBD
+See the following official plugins and their implementations for how to write a plugin. We also have [yeoman generator](https://github.com/kt3k/generator-lepont-bridge) for lepont plugin.
+
+You can scaffold the plugin repository by hitting the following command:
+
+```
+npm i -g yo generator-lepont-bridge
+yo lepont-bridge
+```
 
 # Official Plugins
 
@@ -195,6 +202,8 @@ TBD
   - Share text and files.
 - [@lepont/permissions-android][]
   - Check and request permissions on Android devices.
+- [@lepont/platform][]
+  - Get the platform information.
 
 # TODO Plugins (contributions welcome)
 - `@lepont/cameraroll`
@@ -215,4 +224,5 @@ MIT
 [@lepont/async-storage]: https://github.com/kt3k/lepont-async-storage
 [@lepont/share]: https://github.com/kt3k/lepont-share
 [@lepont/permissions-android]: https://github.com/kt3k/lepont-permissions-android
+[@lepont/platform]: https://github.com/kt3k/lepont-platform
 [AsyncStorage]: https://github.com/react-native-community/async-storage
