@@ -133,7 +133,7 @@ See [this article](https://medium.com/@caphun/react-native-load-local-static-sit
 
 # Module (LePont bridge) ecosystem
 
-LePont aims to have wide range of plugin ecosystem. A lepont plugin is called lepont bridge.
+LePont aims to have wide range of plugin ecosystem. A lepont plugin is called *a lepont bridge*.
 
 Currently LePont supports a few of plugins, but tries to support as many as possible in future.
 
