@@ -18,11 +18,13 @@
 
 > Sous **le pont** Mirabeau coule la Seine et nos amours -- Guillaume Apollinaire
 
-Note: `LePont` (le pont) means "the bridge" in French.
+*Le pont* means "the bridge" in French.
 
-You can bridge the webview and react-native by using `lepont`. You can consider `lepont` as PhoneGap (Cordova) on top of react-native.
+You can bridge the webview and react-native by using `lepont` i.e. you can invoke the functions of react-native from the inside of browser (webview) and pass information back to browser (webview) from react-native side.
 
-React Native already have large swathe of library ecosystem. You can leverage its power from browser by using `lepont` 👍
+Do you remember [PhoneGap (Cordova)](https://en.wikipedia.org/wiki/Apache_Cordova)? `lepont` is something like PhoneGap on top of react-native.
+
+React Native already have large swathe of library ecosystem. You can leverage its power from browser by using `lepont`.
 
 # Usage
 
@@ -128,6 +130,46 @@ on('streaming-event', (payload) => {
 You can package your html and all other assets (css, js) into your app, and we strongly recommend that strategy for reducing significantly the app load time.
 
 See [this article](https://medium.com/@caphun/react-native-load-local-static-site-inside-webview-2b93eb1c4225) for how to bundle the static web assets in your react-native apps.
+
+# Module (LePont bridge) ecosystem
+
+LePont aims to have wide range of plugin ecosystem. A lepont plugin is called lepont bridge.
+
+Currently LePont supports a few of plugins, but tries to support as many as possible in future.
+
+The example of plugin usage:
+
+```tsx
+import React from 'react'
+import { WebView } from 'react-native-webview'
+import { useBridge } from 'lepont'
+import { AsyncStorageBridge } from '@lepont/async-storage/bridge'
+import AsyncStorage from '@react-native-community/async-storage'
+
+const App = () => {
+  const [ref, onMessage] = useBridge(
+    AsyncStorageBridge(AsyncStorage)
+  )
+
+  return (
+    <WebView
+      source={{ uri: 'Web.bundle/index.html' }}
+      ref={ref}
+      onMessage={onMessage}
+      javaScriptEnabled
+    />
+  )
+}
+```
+
+The browser side:
+
+```ts
+import { setItem, getItem } from '@lepont/async-storage'
+
+await setItem('key', 'value')
+await getItem('key') // => 'value'
+```
 
 # API
 
