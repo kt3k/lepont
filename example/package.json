@@ -15,7 +15,7 @@
     "lepont": "^0.11.0",
     "react": "16.8.6",
     "react-native": "0.60.5",
-    "react-native-webview": "^8.1.1"
+    "react-native-webview": "^11.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
