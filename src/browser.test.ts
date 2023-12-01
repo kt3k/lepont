@@ -12,7 +12,7 @@ describe('sendMessage', () => {
     g.ReactNativeWebView = {
       postMessage(m: string): void {
         msg = m
-      }
+      },
     }
 
     const sending = sendMessage({ type: 'foo', payload: { abc: 123 } })
@@ -20,7 +20,7 @@ describe('sendMessage', () => {
     g.LePont.recv({
       id,
       type: 'result',
-      message: { type: 'foo', payload: { def: 456 } }
+      message: { type: 'foo', payload: { def: 456 } },
     })
 
     const res = await sending
@@ -28,7 +28,7 @@ describe('sendMessage', () => {
     // @ts-ignore
     assert.deepStrictEqual(
       msg,
-      JSON.stringify({ id, message: { type: 'foo', payload: { abc: 123 } } })
+      JSON.stringify({ id, message: { type: 'foo', payload: { abc: 123 } } }),
     )
     assert.deepStrictEqual(res, { def: 456 })
   })
@@ -39,7 +39,7 @@ describe('sendMessage', () => {
     g.ReactNativeWebView = {
       postMessage(m: string): void {
         msg = m
-      }
+      },
     }
 
     const sending = sendMessage({ type: 'foo', payload: { abc: 123 } })
@@ -48,7 +48,7 @@ describe('sendMessage', () => {
       id,
       type: 'result',
       message: { type: 'foo', payload: null },
-      error: { message: 'error' }
+      error: { message: 'error' },
     })
 
     await assert.rejects(sending)
@@ -58,13 +58,13 @@ describe('sendMessage', () => {
 describe('on', () => {
   it('subscribes to the given event from the react-native side', () => {
     let payload = null
-    on('stream-event', p => {
+    on('stream-event', (p) => {
       payload = p
     })
 
     g.LePont.recv({
       type: 'event',
-      message: { type: 'stream-event', payload: { abc: 123 } }
+      message: { type: 'stream-event', payload: { abc: 123 } },
     })
 
     assert.deepStrictEqual(payload, { abc: 123 })
@@ -81,7 +81,7 @@ describe('on', () => {
 
       g.LePont.recv({
         type: 'event',
-        message: { type: 'stream-event', payload: { abc: 123 } }
+        message: { type: 'stream-event', payload: { abc: 123 } },
       })
 
       assert.deepStrictEqual(payload, null)
@@ -96,7 +96,7 @@ describe('LePont.recv', () => {
     g.ReactNativeWebView = {
       postMessage(m: string): void {
         msg = m
-      }
+      },
     }
 
     let errMsg = ''
@@ -109,14 +109,14 @@ describe('LePont.recv', () => {
     g.LePont.recv({
       id,
       type: 'result',
-      message: { type: 'foo', payload: null }
+      message: { type: 'foo', payload: null },
     })
     assert.strictEqual(errMsg, '')
 
     g.LePont.recv({
       id,
       type: 'result',
-      message: { type: 'foo', payload: null }
+      message: { type: 'foo', payload: null },
     })
     assert.strictEqual(errMsg, `Resolver for id=${id} not found.`)
   })

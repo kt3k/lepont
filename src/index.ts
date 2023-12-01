@@ -23,7 +23,7 @@ export function useBridge(
   const [registry] = useState<Registry>(() => new Registry())
   useEffect(() => {
     registry.clear()
-    options.forEach(option => option(registry))
+    options.forEach((option) => option(registry))
   }, [registry, ...options])
   return [registry.ref, registry.onMessage, { registry }]
 }
@@ -54,7 +54,7 @@ export class Registry implements Bridge {
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: `Message type cannot be empty: ${type} is given` }
+        error: { message: `Message type cannot be empty: ${type} is given` },
       })
       return
     }
@@ -65,7 +65,7 @@ export class Registry implements Bridge {
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: `No entry for message type: ${type}` }
+        error: { message: `No entry for message type: ${type}` },
       })
       return
     }
@@ -75,14 +75,14 @@ export class Registry implements Bridge {
       this.send({
         type: 'result',
         id,
-        message: { type, payload: res }
+        message: { type, payload: res },
       })
     } catch (e) {
       this.send({
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: (e as any).message }
+        error: { message: (e as any).message },
       })
     }
   }
@@ -90,7 +90,7 @@ export class Registry implements Bridge {
   sendMessage<T>(message: Message<T>): void {
     this.send({
       type: 'event',
-      message
+      message,
     })
   }
 
