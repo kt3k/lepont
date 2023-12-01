@@ -82,7 +82,7 @@ export class Registry implements Bridge {
         type: 'result',
         id,
         message: { type, payload: undefined },
-        error: { message: e.message }
+        error: { message: (e as any).message }
       })
     }
   }
