@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
-    "@babel/runtime": "^7.5.0",
+    "@babel/runtime": "^7.26.10",
     "@types/react": "^16.9.2",
     "@types/react-native": "^0.60.14",
     "@types/react-test-renderer": "^16.9.0",
